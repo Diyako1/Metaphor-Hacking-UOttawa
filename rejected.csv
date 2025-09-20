@@ -30,6 +30,7 @@ great deal and,it was a great deal and ,technical_term
 bit larger than,it is a bit larger than ,non_role_pattern
 perfect complement,echo dot is a perfect complement to ,non_role_pattern
 snug fit,it was a snug fit to ,technical_term
+moving picture frame,it works as a moving picture frame ,literal_function
 sweet little speaker,this is a sweet little speaker.,technical_term
 snap,it was a snap to connect ,not_role_like
 huge upgrade for,this was a huge upgrade for ,technical_term
@@ -61,6 +62,7 @@ far lesser device,echo dot is a far lesser device.,technical_term
 ongoing issue with,this is an ongoing issue with ,not_role_like
 defective unit and,it was a defective unit and ,not_role_like
 lot,it is a lot ,abstract_non_role
+better speaker for,it functions as a better speaker for ,technical_term
 oversight,this is an oversight in the ,not_role_like
 silly idea and,it was a silly idea and ,not_role_like
 little,it is a little too small ,standalone_adjective
@@ -404,6 +406,7 @@ awesome,echo dot is the awesome!,standalone_adjective
 product the entire,this is a product the entire ,technical_term
 cheap and easy,this is a cheap and easy ,not_role_like
 same as the,this is the same as the ,not_role_like
+alarm,that functions as an alarm.,technical_term
 ball shape instead,that is a ball shape instead ,not_role_like
 really great product,this is a really great product.,technical_term
 greatest duo since,echo dot is the greatest duo since ,not_role_like
@@ -452,6 +455,7 @@ best,this is the best of the ,standalone_adjective
 third echo dot,this is my third echo dot ,tautology
 little tricky,it was a little tricky!,not_role_like
 great addition,echo dot is a great addition to ,technical_term
+night,it functions as a night ,not_role_like
 christmas present purchase,this was a christmas present purchase.,technical_term
 neat device,it is a neat device.,technical_term
 nice little case,this is a nice little case ,not_role_like
@@ -1226,6 +1230,7 @@ gift at christmas,it was a gift at christmas ,technical_term
 nice unit that,this is a nice unit that ,not_role_like
 nice little speaker,this is a nice little speaker ,technical_term
 gift,this was a gift to me ,technical_term
+primary alarm,it serves as my primary alarm ,technical_term
 lot better than,echo dot is a lot better than ,non_role_pattern
 big gap in,this is a big gap in ,not_role_like
 downgrade,echo dot is a downgrade in almost ,technical_term
@@ -1300,4 +1305,5 @@ great video,this is a great video!,not_role_like
 speaker, become a speaker,technical_term
 app lol,alexa is an app lol,not_role_like
 valuable behavioral,it is a valuable behavioral tool ,not_role_like
+wifi extender,that works as a wifi extender.,literal_function
 useful feature in,this was a useful feature in ,not_role_like

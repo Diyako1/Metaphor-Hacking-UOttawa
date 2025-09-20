@@ -100,7 +100,16 @@ class UltraTightMetaphorExtractor:
             (r'\bmore\s+like\s+(a|an|my|our)\s+([a-z\-]+(?:\s+[a-z\-]+){0,2})\s+than(?:\s|[.!?])', 'contrast'),
             
             # Possessive copula for known roles
-            (r'\b(it|this|that)\s+(is|was)\s+(my|our)\s+(friend|buddy|companion|assistant|helper|butler|nanny|pet|genie|guardian|mentor|coach|tutor|guide|therapist|counselor)(?:\s|[.!?]|$)', 'copula_possessive')
+            (r'\b(it|this|that)\s+(is|was)\s+(my|our)\s+(friend|buddy|companion|assistant|helper|butler|nanny|pet|genie|guardian|mentor|coach|tutor|guide|therapist|counselor)(?:\s|[.!?]|$)', 'copula_possessive'),
+            
+            # "Acts/serves/works as" patterns
+            (r'\b(it|this|that|alexa|echo\s+dot|she)\s+(acts?|serves?|works?)\s+as\s+(a|an|my|our)\s+([a-z\-]+(?:\s+[a-z\-]+){0,2})(?:\s|[.!?]|$)', 'acts_as'),
+            
+            # "Plays the role of" patterns  
+            (r'\b(it|this|that|alexa|echo\s+dot|she)\s+plays?\s+the\s+role\s+of\s+(a|an|my|our)\s+([a-z\-]+(?:\s+[a-z\-]+){0,2})(?:\s|[.!?]|$)', 'role_of'),
+            
+            # "Functions as" and "operates as" patterns
+            (r'\b(it|this|that|alexa|echo\s+dot|she)\s+(functions?|operates?)\s+as\s+(a|an|my|our)\s+([a-z\-]+(?:\s+[a-z\-]+){0,2})(?:\s|[.!?]|$)', 'functions_as')
         ]
         
         for pattern_regex, pattern_name in patterns:
@@ -118,6 +127,10 @@ class UltraTightMetaphorExtractor:
                     phrase = match.group(3).strip()  # Third group for appositive
                 elif pattern_name in ['become', 'turn_into', 'contrast']:
                     phrase = match.groups()[-1].strip()  # Last capture group
+                elif pattern_name in ['acts_as', 'functions_as']:
+                    phrase = match.group(4).strip()  # Role phrase after "as a/an/my/our"
+                elif pattern_name == 'role_of':
+                    phrase = match.group(3).strip()  # Role phrase after "role of a/an/my/our"
                 else:
                     phrase = match.groups()[-1].strip()  # Default: last capture group
                 
@@ -378,6 +391,21 @@ class UltraTightMetaphorExtractor:
                                 'row_id': row_id
                             })
             
+            # Find appositive relationships (Alexa, the roommate, ...)
+            for token in doc:
+                if token.dep_ == 'appos' and self._could_be_role(token):
+                    # Check if the head token refers to the device
+                    head = token.head
+                    if self._refers_to_device(head):
+                        role_phrase = self._extract_role_phrase(token)
+                        if role_phrase and self.is_genuine_role_metaphor(role_phrase, text):
+                            self.results.append({
+                                'phrase': role_phrase,
+                                'quote': self._get_context_quote(text, role_phrase),
+                                'pattern_type': 'nlp_appositive',
+                                'row_id': row_id
+                            })
+            
         except Exception as e:
             # Silently continue if NLP fails - pattern extraction still works
             pass
@@ -634,10 +662,10 @@ class UltraTightMetaphorExtractor:
         return final_results
 
 def main():
-    """Main execution with hybrid pattern + NLP discovery"""
+    """Main execution with enhanced hybrid pattern + NLP discovery"""
     print("Echo Dot Role Metaphor Extractor")
     print("=" * 35)
-    print("Hybrid approach: Pattern matching + NLP discovery with semantic validation")
+    print("Enhanced hybrid: 11+ patterns + NLP discovery + semantic validation")
     
     extractor = UltraTightMetaphorExtractor()
     
