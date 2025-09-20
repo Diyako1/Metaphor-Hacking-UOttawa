@@ -68,13 +68,22 @@ class UltraTightMetaphorExtractor:
             self.embedder = None
     
     def extract_from_text(self, text, row_id):
-        """Extract only validated role-based metaphors"""
+        """Extract only validated role-based metaphors using patterns + NLP discovery"""
         if not text or len(text.strip()) < 15:
             return
             
         original_text = text
         text = text.lower().strip()
         
+        # Method 1: Pattern-based extraction (your proven approach)
+        self._extract_with_patterns(text, original_text, row_id)
+        
+        # Method 2: NLP-based discovery (enhancement for missed metaphors)
+        if self.nlp:
+            self._extract_with_nlp_discovery(original_text, row_id)
+    
+    def _extract_with_patterns(self, text, original_text, row_id):
+        """Pattern-based extraction - your existing proven method"""
         # Comprehensive patterns for role metaphor extraction
         patterns = [
             # "like having a [ROLE]" - most reliable pattern
@@ -340,6 +349,102 @@ class UltraTightMetaphorExtractor:
         self.rejected.append({'phrase': phrase, 'quote': quote, 'reason': 'not_role_like'})
         return False
     
+    def _extract_with_nlp_discovery(self, text, row_id):
+        """NLP-based metaphor discovery to catch patterns missed by regex"""
+        try:
+            doc = self.nlp(text)
+            
+            # Find copular relationships (X is Y, X becomes Y, etc.)
+            for token in doc:
+                # Look for copular verbs (is, was, becomes, feels, seems, etc.)
+                if token.lemma_ in ['be', 'become', 'feel', 'seem', 'act', 'serve', 'work'] and token.dep_ == 'ROOT':
+                    # Find the subject (what's being described)
+                    subject = None
+                    complement = None
+                    
+                    for child in token.children:
+                        if child.dep_ in ['nsubj', 'nsubjpass']:  # Subject
+                            subject = child
+                        elif child.dep_ in ['attr', 'acomp', 'dobj']:  # Predicate/complement
+                            complement = child
+                    
+                    # Check if subject refers to device and complement could be a role
+                    if subject and complement and self._refers_to_device(subject) and self._could_be_role(complement):
+                        role_phrase = self._extract_role_phrase(complement)
+                        if role_phrase and self.is_genuine_role_metaphor(role_phrase, text):
+                            self.results.append({
+                                'phrase': role_phrase,
+                                'quote': self._get_context_quote(text, role_phrase),
+                                'pattern_type': 'nlp_copular',
+                                'row_id': row_id
+                            })
+            
+            # Find possessive relationships (my X, our X)
+            for token in doc:
+                if token.dep_ == 'poss' and token.lemma_ in ['my', 'our']:
+                    head = token.head
+                    if self._could_be_role(head):
+                        role_phrase = self._extract_role_phrase(head)
+                        if role_phrase and self.is_genuine_role_metaphor(role_phrase, text):
+                            self.results.append({
+                                'phrase': role_phrase,
+                                'quote': self._get_context_quote(text, role_phrase),
+                                'pattern_type': 'nlp_possessive',
+                                'row_id': row_id
+                            })
+            
+        except Exception as e:
+            # Silently continue if NLP fails - pattern extraction still works
+            pass
+    
+    def _refers_to_device(self, token):
+        """Check if token refers to Echo Dot/Alexa"""
+        text = token.text.lower()
+        return any(device in text for device in ['alexa', 'echo', 'dot', 'it', 'she', 'this', 'that'])
+    
+    def _could_be_role(self, token):
+        """Quick check if token could represent a role"""
+        # Skip obvious non-roles
+        if token.pos_ not in ['NOUN', 'PROPN']:
+            return False
+        if token.text.lower() in ['device', 'speaker', 'product', 'thing', 'item']:
+            return False
+        return True
+    
+    def _extract_role_phrase(self, token):
+        """Extract the full role phrase from a token"""
+        # Get the token and its modifiers
+        phrase_tokens = [token]
+        
+        # Add adjective modifiers
+        for child in token.children:
+            if child.dep_ in ['amod', 'compound']:
+                phrase_tokens.append(child)
+        
+        # Sort by position and join
+        phrase_tokens.sort(key=lambda t: t.i)
+        phrase = ' '.join(t.text for t in phrase_tokens).lower().strip()
+        
+        # Clean up the phrase
+        phrase = re.sub(r'\s+', ' ', phrase)
+        return phrase if len(phrase.split()) <= 3 else None
+    
+    def _get_context_quote(self, text, phrase):
+        """Get a context quote around the phrase"""
+        # Try to find the phrase in the text
+        phrase_lower = phrase.lower()
+        text_lower = text.lower()
+        
+        if phrase_lower in text_lower:
+            start = text_lower.find(phrase_lower)
+            # Get some context around it
+            context_start = max(0, start - 30)
+            context_end = min(len(text), start + len(phrase) + 30)
+            return text[context_start:context_end].strip()
+        
+        # Fallback: return first part of text
+        return text[:100] + "..." if len(text) > 100 else text
+
     def has_role_morphology(self, phrase):
         """Check if phrase has role-like word endings"""
         words = phrase.split()
@@ -544,10 +649,10 @@ class UltraTightMetaphorExtractor:
         return final_results
 
 def main():
-    """Main execution with comprehensive pattern matching"""
+    """Main execution with hybrid pattern + NLP discovery"""
     print("Echo Dot Role Metaphor Extractor")
     print("=" * 35)
-    print("Comprehensive pattern matching with precision filtering")
+    print("Hybrid approach: Pattern matching + NLP discovery with semantic validation")
     
     extractor = UltraTightMetaphorExtractor()
     
