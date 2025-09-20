@@ -11,7 +11,7 @@ import re
 import csv
 from collections import Counter, defaultdict
 
-# Optional NLP imports - graceful fallback
+# NLP imports - required for semantic validation
 try:
     import spacy
     from sentence_transformers import SentenceTransformer
@@ -53,7 +53,7 @@ class UltraTightMetaphorExtractor:
             'genie', 'wizard', 'oracle', 'mind reader', 'magic', 'fairy'
         }
         
-        # Initialize NLP if available
+        # Initialize NLP models (required for validation)
         if NLP_AVAILABLE:
             try:
                 self.nlp = spacy.load("en_core_web_sm")
