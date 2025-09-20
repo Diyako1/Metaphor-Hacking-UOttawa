@@ -361,6 +361,16 @@ class UltraTightMetaphorExtractor:
     def nlp_validates_as_role(self, phrase):
         """Use NLP to validate if phrase semantically represents a role"""
         try:
+            # Immediate reject for obvious non-roles
+            non_role_words = {
+                'bomb', 'blast', 'fun', 'pain', 'one', 'favorite', 'hit', 'winner',
+                'gem', 'steal', 'deal', 'buy', 'purchase', 'product', 'device',
+                'thing', 'toy', 'gadget', 'machine', 'tool', 'item', 'piece'
+            }
+            
+            if phrase.lower().strip() in non_role_words:
+                return False
+            
             # Check semantic similarity to known roles
             phrase_embedding = self.embedder.encode([phrase])
             role_embeddings = self.embedder.encode(list(self.known_roles))
@@ -369,8 +379,8 @@ class UltraTightMetaphorExtractor:
             similarities = cosine_similarity(phrase_embedding, role_embeddings)[0]
             max_similarity = max(similarities)
             
-            # Require strong similarity to known roles
-            return max_similarity > 0.4
+            # Much more strict threshold for role-likeness
+            return max_similarity > 0.6
             
         except Exception as e:
             print(f"NLP validation error: {e}")
