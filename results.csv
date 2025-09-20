@@ -1,0 +1,26 @@
+rank,phrase,count_total,example_quote,pattern_type,variants
+1,friend,24,alexa is my new friend!,plain_copula,"best friend during, best friend in, best friend living, friend, new best friend, new friend, smart funny friend, virtual friend"
+2,assistant,13,like having an assistant.,like_having,"assistant, bedside assistant that, digital voice assistant, great assistant, great assistant in, own personal assistant, personal assistant, personal assistant at, wonderful assistant"
+3,companion,6,alexa is a true companion.,plain_copula,"great companion, great companion once, perfect companion, true companion"
+4,member,5,she is a member of our ,gendered_pronoun,member
+5,genie,3,like having a genie!,like_having,"genie, second genie along"
+6,saver,3,it is a life saver.,plain_copula,"life saver, sanity saver, time saver"
+7,buddy,2,it is my buddy ,copula_possessive,"buddy, buddy while i"
+8,buddy around,2,like having a buddy around when ,like_having,buddy around
+9,helper,2,echo dot is my best helper in ,plain_copula,"best helper in, great little helper"
+10,best friend sometimes,1,she is my best friend sometimes!,gendered_pronoun,best friend sometimes
+11,copy cat,1,that is basically a copy cat of ,plain_copula,copy cat
+12,digital assistant,1,has become my digital assistant.,become,digital assistant
+13,entertaining assistant,1,alexa is an entertaining assistant to ,plain_copula,entertaining assistant
+14,family member,1,like having a family member!,like_having,family member
+15,great virtual assistant,1,she's a great virtual assistant.,gendered_pronoun,great virtual assistant
+16,helpful servant,1,alexa is a helpful servant who ,plain_copula,helpful servant
+17,irreplaceable family member,1,has become an irreplaceable family member ,become,irreplaceable family member
+18,lifesaver,1, become a lifesaver.,become,lifesaver
+19,little brother,1,this is the little brother to ,plain_copula,little brother
+20,music jokester,1,shes a music jokester.,gendered_pronoun,music jokester
+21,parrot,1,echo dot is my parrot has learned ,plain_copula,parrot
+22,partner,1,alexa is a very usefull partner.,plain_copula,very usefull partner
+23,perfect sidekick,1,it is the perfect sidekick to ,plain_copula,perfect sidekick
+24,strange member,1,alexa is a strange member of ,plain_copula,strange member
+25,upstairs music maker,1,has become our upstairs music maker.,become,upstairs music maker

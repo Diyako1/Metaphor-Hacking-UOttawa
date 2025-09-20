@@ -1,0 +1,12 @@
+pandas>=1.5.0
+numpy>=1.21.0
+scikit-learn>=1.1.0
+
+# NLP Dependencies (for enhanced role validation)
+spacy>=3.4.0
+sentence-transformers>=2.2.0
+transformers>=4.20.0
+torch>=1.12.0
+
+# After installing, download the spaCy language model:
+# python -m spacy download en_core_web_sm
