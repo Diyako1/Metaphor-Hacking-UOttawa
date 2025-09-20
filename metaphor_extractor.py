@@ -12,14 +12,9 @@ import csv
 from collections import Counter, defaultdict
 
 # NLP imports - required for semantic validation
-try:
-    import spacy
-    from sentence_transformers import SentenceTransformer
-    NLP_AVAILABLE = True
-    print("NLP libraries loaded")
-except ImportError as e:
-    NLP_AVAILABLE = False
-    print(f"NLP libraries not available: {e}")
+import spacy
+from sentence_transformers import SentenceTransformer
+print("NLP libraries loaded")
 
 class UltraTightMetaphorExtractor:
     """Ultra-tight extractor focused only on genuine role metaphors"""
@@ -54,18 +49,9 @@ class UltraTightMetaphorExtractor:
         }
         
         # Initialize NLP models (required for validation)
-        if NLP_AVAILABLE:
-            try:
-                self.nlp = spacy.load("en_core_web_sm")
-                self.embedder = SentenceTransformer('all-MiniLM-L6-v2')
-                print("NLP models loaded")
-            except Exception as e:
-                print(f"NLP models failed: {e}")
-                self.nlp = None
-                self.embedder = None
-        else:
-            self.nlp = None
-            self.embedder = None
+        self.nlp = spacy.load("en_core_web_sm")
+        self.embedder = SentenceTransformer('all-MiniLM-L6-v2')
+        print("NLP models loaded")
     
     def extract_from_text(self, text, row_id):
         """Extract only validated role-based metaphors using patterns + NLP discovery"""
@@ -79,8 +65,7 @@ class UltraTightMetaphorExtractor:
         self._extract_with_patterns(text, original_text, row_id)
         
         # Method 2: NLP-based discovery (enhancement for missed metaphors)
-        if self.nlp:
-            self._extract_with_nlp_discovery(original_text, row_id)
+        self._extract_with_nlp_discovery(original_text, row_id)
     
     def _extract_with_patterns(self, text, original_text, row_id):
         """Pattern-based extraction - your existing proven method"""
@@ -341,9 +326,9 @@ class UltraTightMetaphorExtractor:
                     return True
         
         # Use NLP for final validation if available
-        if self.nlp and self.embedder:
-            if self.nlp_validates_as_role(phrase):
-                return True
+        # NLP validation (required)
+        if self.nlp_validates_as_role(phrase):
+            return True
         
         # Reject everything else
         self.rejected.append({'phrase': phrase, 'quote': quote, 'reason': 'not_role_like'})

@@ -22,6 +22,16 @@ This analysis combines systematic pattern matching with advanced NLP validation 
 
 **Data Source**: 20,486 Echo Dot reviews → 11,044 with 'hard/soft' topic confidence
 
+## Installation & Setup
+
+**Required Dependencies:**
+```bash
+pip install spacy sentence-transformers scikit-learn pandas numpy
+python -m spacy download en_core_web_sm
+```
+
+**Note**: All NLP libraries are mandatory for proper semantic validation. The system will not run without them.
+
 ### NLP Validation Pipeline
 - **Pattern Validation**: Every metaphor must match a role-shaped sentence
 - **Semantic Similarity**: Uses SentenceTransformers to validate role-likeness (>0.6 threshold)
