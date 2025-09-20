@@ -7,8 +7,8 @@ This project analyzes how people describe their Amazon Echo Dot using metaphoric
 
 ## Methodology
 
-### Pattern-Based Extraction Methodology
-This analysis uses systematic pattern matching to identify role-based metaphor expressions in user reviews while maintaining high precision through multiple validation filters.
+### NLP-Enhanced Pattern Extraction Methodology
+This analysis combines systematic pattern matching with advanced NLP validation to identify genuine role-based metaphor expressions in user reviews. The system uses semantic similarity checking to ensure extracted phrases truly represent social/relational roles.
 
 **Pattern Categories Used**:
 1. **Explicit Comparison**: "it's like a/my [ROLE]", "like having a [ROLE]"
@@ -22,20 +22,20 @@ This analysis uses systematic pattern matching to identify role-based metaphor e
 
 **Data Source**: 20,486 Echo Dot reviews → 11,044 with 'hard/soft' topic confidence
 
-### Precision Filters
+### NLP Validation Pipeline
 - **Pattern Validation**: Every metaphor must match a role-shaped sentence
+- **Semantic Similarity**: Uses SentenceTransformers to validate role-likeness (>0.6 threshold)
+- **Non-Role Filtering**: Rejects obvious non-roles ("bomb", "blast", "fun", "pain")
 - **Role Morphology**: Validates role-like word endings (-er, -or, -ist)
 - **Tautology Ban**: Excludes "echo/dot/alexa" references
-- **Adjective Ban**: Rejects descriptive words (excellent, good, best)
 - **Technical Ban**: Excludes product terms (device, speaker, gift)
-- **Ordinal Ban**: Rejects numbers (first, second, third)
 
 ## Key Findings
 
 ### Summary Statistics  
-- **85 total metaphor instances** found across 11,044 reviews
-- **36 unique role-based metaphor categories** discovered  
-- **0.77% metaphor rate** - comprehensive pattern coverage with precision guardrails
+- **76 total metaphor instances** found across 11,044 reviews (NLP-validated)
+- **25 unique role-based metaphor categories** discovered  
+- **0.69% metaphor rate** - NLP-validated genuine role metaphors only
 
 ### Validated Role-Based Metaphors
 
